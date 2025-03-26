@@ -1,5 +1,5 @@
 /*TODO:
-- restart
+- restart on refresh and show past result on back nav
 */
 
 //keyboard letters
@@ -9,25 +9,37 @@ const keyboard = [
   ["ENTER", "Z", "X", "C", "V", "B", "N", "M", "DEL"],
 ];
 
+const backupWords = [
+  "apple",
+  "happy",
+  "break",
+  "slate",
+  "stats",
+  "stake",
+  "mints",
+];
+
 const getData = async () => {
-  const url = "../data/words.txt";
+  const url = "/data/words.txt";
   try {
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
     const txt = await response.text();
+    if (!txt || txt.length === 0) {
+      return backupWords;
+    }
+
     return txt.split("\n");
   } catch (error) {
     console.error(error.message);
+    return backupWords;
   }
 };
 
 const randomizer = async () => {
-  lines = await getData();
-  if (!lines || lines.length === 0) {
-    return "apple"; // fallback
-  }
+  const lines = await getData();
   const randomIdx = Math.floor(Math.random() * lines.length);
   return lines[randomIdx];
 };
@@ -151,7 +163,7 @@ const restrictInputs = async () => {
     const gridInput = document.getElementById(textId);
     guess += gridInput.textContent;
   }
-  words = await getData();
+  let words = await getData();
   if (!words.includes(guess.toLowerCase())) {
     alert("Word is not in our dictionary");
     return true;
