@@ -17,10 +17,11 @@ const backupWords = [
   "stats",
   "stake",
   "mints",
+  "hello",
 ];
 
 const getData = async () => {
-  const url = "/data/words.txt";
+  const url = "/sdata/words.txt";
   try {
     const response = await fetch(url);
     if (!response.ok) {
