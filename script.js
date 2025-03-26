@@ -1,7 +1,5 @@
 /*TODO:
-- add retrictions to real words only
 - restart
-- on loss show correct word
 */
 
 //keyboard letters
@@ -28,7 +26,7 @@ const getData = async () => {
 const randomizer = async () => {
   lines = await getData();
   if (!lines || lines.length === 0) {
-    return "APPLE"; // fallback
+    return "apple"; // fallback
   }
   const randomIdx = Math.floor(Math.random() * lines.length);
   return lines[randomIdx];
@@ -137,12 +135,28 @@ const handleLoss = () => {
     }, 500);
   }
 };
+
 const handleWin = () => {
   if (isWin()) {
     setTimeout(() => {
       window.location.assign("/win.html");
     }, 500);
   }
+};
+
+const restrictInputs = async () => {
+  let guess = "";
+  for (let i = 0; i < 5; i++) {
+    const textId = currRow.toString() + i.toString();
+    const gridInput = document.getElementById(textId);
+    guess += gridInput.textContent;
+  }
+  words = await getData();
+  if (!words.includes(guess.toLowerCase())) {
+    alert("Word is not in our dictionary");
+    return true;
+  }
+  return false;
 };
 
 //handles css color changes when enter is applied
@@ -181,7 +195,7 @@ const handleEnter = () => {
 };
 
 //handles keyboard clicks
-const handleClick = (event) => {
+const handleClick = async (event) => {
   const buttonId = event.currentTarget.getAttribute("id");
   let textId;
   let currSpanElement;
@@ -197,11 +211,14 @@ const handleClick = (event) => {
       break;
     case "ENTER":
       if (currCol === 5) {
-        handleEnter();
-        handleLoss();
-        handleWin();
-        currCol = 0;
-        currRow++;
+        const ri = await restrictInputs();
+        if (!ri) {
+          handleEnter();
+          handleLoss();
+          handleWin();
+          currCol = 0;
+          currRow++;
+        }
       }
       break;
     default:
