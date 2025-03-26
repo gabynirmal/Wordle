@@ -1,0 +1,89 @@
+body {
+  background-color: #121213;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+h1 {
+  text-align: center;
+  color: #f8f8f8;
+  font-family: "Rockwell", Arial, Helvetica, sans-serif;
+}
+
+span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #f8f8f8;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: "Franklin Gothic Medium", Arial, sans-serif;
+}
+
+.keyboard-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.keyboard-rows {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.grid-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.grid-rows {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.grid-inputs {
+  border: 2px, solid, #3a3a3c;
+  padding: 5px;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  margin: 2.5px;
+}
+
+.reg-keys {
+  width: 40px;
+  height: 55px;
+  margin: 3px;
+  color: #f8f8f8;
+  background-color: #818384;
+  border: none;
+  border-radius: 3px;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-family: "Franklin Gothic Medium", Arial, sans-serif;
+}
+
+.special-keys {
+  height: 55px;
+  margin: 3px;
+  color: #f8f8f8;
+  background-color: #818384;
+  border: none;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 15px;
+  font-family: "Franklin Gothic Medium", Arial, sans-serif;
+}
