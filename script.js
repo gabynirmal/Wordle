@@ -105,6 +105,7 @@ const loadGame = async () => {
   secretWord = await randomizer();
   createGrid();
   createKeyboard();
+  console.log(secretWord);
 };
 
 const isWin = () => {
@@ -130,6 +131,7 @@ const isWin = () => {
 
 const handleLoss = () => {
   if (!isWin() && currRow === 5 && currCol == 5) {
+    localStorage.setItem("lostWord", secretWord);
     setTimeout(() => {
       window.location.assign("/lose.html");
     }, 500);

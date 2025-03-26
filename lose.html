@@ -10,6 +10,12 @@
   <body>
     <main>
       <h1>LOSER!</h1>
+      <script>
+        const word = localStorage.getItem("lostWord");
+        const h1 = document.createElement("h1");
+        h1.textContent = "Word: " + word.toUpperCase();
+        document.querySelector("main").append(h1);
+      </script>
     </main>
   </body>
 </html>
