@@ -1,10 +1,8 @@
 /*TODO:
-- add words.txt and randomize
+- add words.txt and randomize, and add retrictions to real words only
 - win and lose state
 - restart
-- keyboard to button functionality
-- wordle favicon
-- change del to delete icon
+- fix input line 91 blahhh
 
 */
 
@@ -16,7 +14,7 @@ const keyboard = [
 ];
 
 const secretWords = ["HAPPY", "WORDS", "APPLE", "STAKE"];
-const secretWord = "SOWER";
+const secretWord = "TABLE";
 
 //current row and column for inputting text
 var currRow = 0;
@@ -41,6 +39,19 @@ const createGrid = () => {
   document.querySelector("main").append(divGridContainer);
 };
 
+//event listener for keyboard presses
+const handleKeyPress = () => {
+  document.addEventListener("keydown", (event) => {
+    button = document.getElementById(event.key.toUpperCase());
+    if (event.key === "Enter") {
+      button = document.getElementById("ENTER");
+    } else if (event.key === "Backspace") {
+      button = document.getElementById("DEL");
+    }
+    button.click();
+  });
+};
+
 //create the keyboard in HTML with enter and delete
 const createKeyboard = () => {
   const divKeyboardContainer = document.createElement("div");
@@ -50,12 +61,13 @@ const createKeyboard = () => {
     divRowContainer.classList.add("keyboard-rows");
     row.forEach((key) => {
       const buttonKey = document.createElement("button");
-      buttonKey.textContent = key;
+      if (key === "DEL") {
+        buttonKey.textContent = "\u232B";
+      } else {
+        buttonKey.textContent = key;
+      }
       buttonKey.setAttribute("id", key);
-      if (
-        buttonKey.getAttribute("id") === "ENTER" ||
-        buttonKey.getAttribute("id") === "DEL"
-      ) {
+      if (key === "ENTER" || key === "DEL") {
         buttonKey.classList.add("special-keys");
       } else {
         buttonKey.classList.add("reg-keys");
@@ -65,12 +77,24 @@ const createKeyboard = () => {
     });
     divKeyboardContainer.append(divRowContainer);
   });
+  handleKeyPress();
   document.querySelector("main").append(divKeyboardContainer);
 };
+
+//handles lose state
+const handleLoss = () => {
+  if (currRow === 6 && currCol === 5 && !handleEnter()) {
+    console.log("you lose");
+  }
+};
+
+//handles win state
 
 //handles css color changes when enter is applied
 const handleEnter = () => {
   let letterArray = [];
+  let amtCorrect = 0;
+  let win;
   for (let i = 0; i < secretWord.length; i++) {
     letterArray.push(secretWord.charAt(i));
   }
@@ -84,6 +108,7 @@ const handleEnter = () => {
       gridInput.style.backgroundColor = "#618c55";
       gridInput.style.border = "2px, solid, #618c55";
       button.style.backgroundColor = "#618c55";
+      amtCorrect++;
 
       //yellow: letter in word, but wrong spot
     } else if (letterArray.includes(gridInput.textContent)) {
@@ -98,7 +123,13 @@ const handleEnter = () => {
       gridInput.style.border = "2px, solid, #3a3a3c";
       button.style.backgroundColor = "#3a3a3c";
     }
+    if (amtCorrect === 5) {
+      win = true;
+    } else {
+      win = false;
+    }
   }
+  return win;
 };
 
 //handles keyboard clicks
@@ -119,6 +150,7 @@ const handleClick = (event) => {
     case "ENTER":
       if (currCol === 5) {
         handleEnter();
+        handleLoss();
         currCol = 0;
         currRow++;
       }
