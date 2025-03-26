@@ -1,8 +1,6 @@
 /*TODO:
 - add words.txt and randomize, and add retrictions to real words only
-- win and lose state
 - restart
-- fix input line 91 blahhh
 
 */
 
@@ -14,7 +12,7 @@ const keyboard = [
 ];
 
 const secretWords = ["HAPPY", "WORDS", "APPLE", "STAKE"];
-const secretWord = "TABLE";
+const secretWord = "pussy";
 
 //current row and column for inputting text
 var currRow = 0;
@@ -81,20 +79,46 @@ const createKeyboard = () => {
   document.querySelector("main").append(divKeyboardContainer);
 };
 
-//handles lose state
-const handleLoss = () => {
-  if (currRow === 6 && currCol === 5 && !handleEnter()) {
-    console.log("you lose");
+const isWin = () => {
+  let letterArray = [];
+
+  for (let i = 0; i < secretWord.length; i++) {
+    letterArray.push(secretWord.charAt(i));
+  }
+  let amtCorrect = 0;
+  for (let i = 0; i < 5; i++) {
+    const textId = currRow.toString() + i.toString();
+    const gridInput = document.getElementById(textId);
+    if (letterArray[i] == gridInput.textContent.toLowerCase()) {
+      amtCorrect++;
+    }
+  }
+  if (amtCorrect === 5) {
+    return true;
+  } else {
+    return false;
   }
 };
 
-//handles win state
+const handleLoss = () => {
+  if (!isWin() && currRow === 5 && currCol == 5) {
+    setTimeout(() => {
+      window.location.assign("/lose.html");
+    }, 1000);
+  }
+};
+const handleWin = () => {
+  if (isWin()) {
+    setTimeout(() => {
+      window.location.assign("/win.html");
+    }, 1000);
+  }
+};
 
 //handles css color changes when enter is applied
 const handleEnter = () => {
   let letterArray = [];
-  let amtCorrect = 0;
-  let win;
+
   for (let i = 0; i < secretWord.length; i++) {
     letterArray.push(secretWord.charAt(i));
   }
@@ -102,17 +126,17 @@ const handleEnter = () => {
     const textId = currRow.toString() + i.toString();
     const gridInput = document.getElementById(textId);
     const button = document.getElementById(gridInput.textContent);
-
+    const idxLetter = letterArray.indexOf(gridInput.textContent.toLowerCase());
     //green: letter in correct spot
-    if (letterArray[i] == gridInput.textContent) {
+    if (letterArray[i] == gridInput.textContent.toLowerCase()) {
+      letterArray[i] = 0;
       gridInput.style.backgroundColor = "#618c55";
       gridInput.style.border = "2px, solid, #618c55";
       button.style.backgroundColor = "#618c55";
-      amtCorrect++;
 
       //yellow: letter in word, but wrong spot
-    } else if (letterArray.includes(gridInput.textContent)) {
-      letterArray[i] = 0;
+    } else if (letterArray.includes(gridInput.textContent.toLowerCase())) {
+      letterArray[idxLetter] = 0;
       gridInput.style.backgroundColor = "#b1a04c";
       gridInput.style.border = "2px, solid, #b1a04c";
       button.style.backgroundColor = "#b1a04c";
@@ -123,13 +147,7 @@ const handleEnter = () => {
       gridInput.style.border = "2px, solid, #3a3a3c";
       button.style.backgroundColor = "#3a3a3c";
     }
-    if (amtCorrect === 5) {
-      win = true;
-    } else {
-      win = false;
-    }
   }
-  return win;
 };
 
 //handles keyboard clicks
@@ -151,6 +169,7 @@ const handleClick = (event) => {
       if (currCol === 5) {
         handleEnter();
         handleLoss();
+        handleWin();
         currCol = 0;
         currRow++;
       }
