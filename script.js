@@ -116,7 +116,6 @@ const loadGame = async () => {
   secretWord = await randomizer();
   createGrid();
   createKeyboard();
-  console.log(secretWord);
 };
 
 const isWin = () => {
