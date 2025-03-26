@@ -1,7 +1,7 @@
 /*TODO:
-- add words.txt and randomize, and add retrictions to real words only
+- add retrictions to real words only
 - restart
-
+- on loss show correct word
 */
 
 //keyboard letters
@@ -11,12 +11,34 @@ const keyboard = [
   ["ENTER", "Z", "X", "C", "V", "B", "N", "M", "DEL"],
 ];
 
-const secretWords = ["HAPPY", "WORDS", "APPLE", "STAKE"];
-const secretWord = "pussy";
+const getData = async () => {
+  const url = "../data/words.txt";
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    const txt = await response.text();
+    return txt.split("\n");
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+const randomizer = async () => {
+  lines = await getData();
+  if (!lines || lines.length === 0) {
+    return "APPLE"; // fallback
+  }
+  const randomIdx = Math.floor(Math.random() * lines.length);
+  return lines[randomIdx];
+};
+
+let secretWord;
 
 //current row and column for inputting text
-var currRow = 0;
-var currCol = 0;
+let currRow = 0;
+let currCol = 0;
 
 //create the grid in HTML where the letters are inputted
 const createGrid = () => {
@@ -79,6 +101,12 @@ const createKeyboard = () => {
   document.querySelector("main").append(divKeyboardContainer);
 };
 
+const loadGame = async () => {
+  secretWord = await randomizer();
+  createGrid();
+  createKeyboard();
+};
+
 const isWin = () => {
   let letterArray = [];
 
@@ -104,14 +132,14 @@ const handleLoss = () => {
   if (!isWin() && currRow === 5 && currCol == 5) {
     setTimeout(() => {
       window.location.assign("/lose.html");
-    }, 1000);
+    }, 500);
   }
 };
 const handleWin = () => {
   if (isWin()) {
     setTimeout(() => {
       window.location.assign("/win.html");
-    }, 1000);
+    }, 500);
   }
 };
 
@@ -189,5 +217,4 @@ const handleClick = (event) => {
   }
 };
 
-createGrid();
-createKeyboard();
+loadGame();
