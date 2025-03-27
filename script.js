@@ -1,6 +1,6 @@
 /*TODO:
 - make alert for non-dictionary words a temporary popup
-- make it look good on phone
+- make it look gd ood on phone
 */
 
 //keyboard letters
@@ -10,6 +10,7 @@ const keyboard = [
   ["ENTER", "Z", "X", "C", "V", "B", "N", "M", "DEL"],
 ];
 
+//backup in case txt file doesn't load
 const backupWords = [
   "apple",
   "happy",
@@ -21,6 +22,11 @@ const backupWords = [
   "hello",
 ];
 
+//current row and column for inputting text, 00 is top left
+let currRow = 0;
+let currCol = 0;
+
+//returns the 5 letter words as an array
 const getData = async () => {
   const url = "data/words.txt";
   try {
@@ -32,7 +38,6 @@ const getData = async () => {
     if (!txt || txt.length === 0) {
       return backupWords;
     }
-
     return txt.split("\n");
   } catch (error) {
     console.error(error.message);
@@ -40,17 +45,12 @@ const getData = async () => {
   }
 };
 
+//returns a random word from the list
 const randomizer = async () => {
   const lines = await getData();
   const randomIdx = Math.floor(Math.random() * lines.length);
   return lines[randomIdx];
 };
-
-let secretWord;
-
-//current row and column for inputting text
-let currRow = 0;
-let currCol = 0;
 
 //create the grid in HTML where the letters are inputted
 const createGrid = () => {
@@ -71,7 +71,7 @@ const createGrid = () => {
   document.querySelector("main").append(divGridContainer);
 };
 
-//event listener for keyboard presses
+//event listener to attach keyboard presses to button clicks
 const handleKeyPress = () => {
   document.addEventListener("keydown", (event) => {
     button = document.getElementById(event.key.toUpperCase());
@@ -84,7 +84,7 @@ const handleKeyPress = () => {
   });
 };
 
-//create the keyboard in HTML with enter and delete
+//create the keyboard in HTML: 26 Letters + Enter and Delete
 const createKeyboard = () => {
   const divKeyboardContainer = document.createElement("div");
   divKeyboardContainer.classList.add("keyboard-container");
@@ -113,12 +113,17 @@ const createKeyboard = () => {
   document.querySelector("main").append(divKeyboardContainer);
 };
 
+//word to be guessed
+let secretWord;
+
+//loads the game and generates the secret word to be guessed
 const loadGame = async () => {
   secretWord = await randomizer();
   createGrid();
   createKeyboard();
 };
 
+//has the game been won?
 const isWin = () => {
   let letterArray = [];
 
@@ -140,6 +145,7 @@ const isWin = () => {
   }
 };
 
+//switch to lose screen if the player has lost
 const handleLoss = () => {
   if (!isWin() && currRow === 5 && currCol == 5) {
     localStorage.setItem("lostWord", secretWord);
@@ -149,6 +155,7 @@ const handleLoss = () => {
   }
 };
 
+//switch to win screen if the player has won
 const handleWin = () => {
   if (isWin()) {
     setTimeout(() => {
@@ -157,6 +164,8 @@ const handleWin = () => {
   }
 };
 
+//restrict inputs to words that are in the wordlist
+//return if an input was restricted or not
 const restrictInputs = async () => {
   let guess = "";
   for (let i = 0; i < 5; i++) {
@@ -172,7 +181,8 @@ const restrictInputs = async () => {
   return false;
 };
 
-//handles css color changes when enter is applied
+//handles css color changes when enter is applied to show
+//if any letters inputted are in the secret word
 const handleEnter = () => {
   let letterArray = [];
 
