@@ -1,5 +1,5 @@
 /*TODO:
-- restart on refresh and show past result on back nav
+- make alert for non-dictionary words a temporary popup
 - make it look good on phone
 */
 

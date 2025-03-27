@@ -74,6 +74,7 @@ span {
   padding-top: 15px;
   padding-bottom: 15px;
   font-family: "Franklin Gothic Medium", Arial, sans-serif;
+  cursor: pointer;
 }
 
 .special-keys {
@@ -87,4 +88,25 @@ span {
   font-weight: bold;
   padding: 15px;
   font-family: "Franklin Gothic Medium", Arial, sans-serif;
+  cursor: pointer;
+}
+
+.win-lose-containers {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.play-again {
+  margin: 3px;
+  color: #f8f8f8;
+  background-color: #618c55;
+  border: none;
+  border-radius: 3px;
+  font-size: 25px;
+  font-weight: bold;
+  padding: 15px;
+  font-family: "Franklin Gothic Medium", Arial, sans-serif;
+  cursor: pointer;
 }
