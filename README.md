@@ -1,1 +1,3 @@
-https://gabynirmal.github.io/Wordle/
+Play here: https://gabynirmal.github.io/Wordle/
+
+Rules: same as Wordle NYT
