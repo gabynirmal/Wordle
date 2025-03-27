@@ -1,5 +1,6 @@
 /*TODO:
 - restart on refresh and show past result on back nav
+- make it look good on phone
 */
 
 //keyboard letters
@@ -143,7 +144,7 @@ const handleLoss = () => {
   if (!isWin() && currRow === 5 && currCol == 5) {
     localStorage.setItem("lostWord", secretWord);
     setTimeout(() => {
-      window.location.assign("/lose.html");
+      window.location.assign("lose.html");
     }, 500);
   }
 };
@@ -151,7 +152,7 @@ const handleLoss = () => {
 const handleWin = () => {
   if (isWin()) {
     setTimeout(() => {
-      window.location.assign("/win.html");
+      window.location.assign("win.html");
     }, 500);
   }
 };
